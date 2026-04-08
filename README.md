@@ -56,6 +56,10 @@ VITE_API_URL=http://localhost:3000/api
 VITE_STREAM_API_KEY=your_stream_api_key
 ```
 
+## Code Execution
+
+The code runner now uses the backend at `/api/execute` instead of the retired public Piston API. Make sure `node`, `python3`, `javac`, and `java` are installed on the machine running the backend.
+
 ---
 
 ## 🔧 Run the Backend
