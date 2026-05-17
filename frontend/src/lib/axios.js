@@ -10,10 +10,17 @@ const axiosInstance = axios.create({
   withCredentials: true,
 });
 
-// Debug: Log all requests to see what's being called
-axiosInstance.interceptors.request.use((config) => {
-  console.log("🔵 API Request:", config.method?.toUpperCase(), config.url, "Full URL:", config.baseURL + config.url);
-  return config;
-});
+// Add response error handling to suppress harmless errors
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    // Ignore root path 404s (favicon, health checks, etc)
+    if (error.config?.url === "/" || error.response?.status === 404) {
+      console.debug("Harmless 404:", error.config?.url);
+      return Promise.reject(error);
+    }
+    return Promise.reject(error);
+  }
+);
 
 export default axiosInstance;
