@@ -22,7 +22,7 @@ export async function executeCode(language, code) {
       };
     }
 
-    const response = await axiosInstance.post("/execute", {
+      const response = await axiosInstance.post("execute", {
       language: languageConfig.language,
       code,
     });
