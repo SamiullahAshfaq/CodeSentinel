@@ -2,7 +2,8 @@ import axios from "axios";
 
 // In production (Vercel), use the full backend URL from env vars
 // In development, use /api (proxied by Vite)
-const baseURL = import.meta.env.VITE_API_URL || "/api";
+// Ensure trailing slash for proper path concatenation
+const baseURL = (import.meta.env.VITE_API_URL || "/api").replace(/\/$/, "") + "/";
 
 const axiosInstance = axios.create({
   baseURL,
