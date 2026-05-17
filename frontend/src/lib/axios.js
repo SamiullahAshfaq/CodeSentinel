@@ -9,4 +9,10 @@ const axiosInstance = axios.create({
   withCredentials: true,
 });
 
+// Debug: Log all requests to see what's being called
+axiosInstance.interceptors.request.use((config) => {
+  console.log("🔵 API Request:", config.method?.toUpperCase(), config.url, "Full URL:", config.baseURL + config.url);
+  return config;
+});
+
 export default axiosInstance;

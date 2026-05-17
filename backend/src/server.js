@@ -60,14 +60,10 @@ app.get("/health", (req, res) => {
   res.status(200).json({ msg: "api is up and running" });
 });
 
-// make our app ready for deployment
-if (ENV.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../frontend/dist")));
-
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
-  });
-}
+// Catch-all for undefined routes - return 404
+app.use((req, res) => {
+  res.status(404).json({ error: "Route not found" });
+});
 
 const startServer = async () => {
   try {
