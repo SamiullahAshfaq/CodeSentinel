@@ -1,22 +1,37 @@
 import axios from "axios";
+import { getAuth } from "@clerk/clerk-react";
 
-// In production (Vercel), use the full backend URL from env vars
-// In development, use /api (proxied by Vite)
-// Ensure trailing slash for proper path concatenation
-const baseURL = (import.meta.env.VITE_API_URL || "/api").replace(/\/$/, "") + "/";
+// Use env var in production, fallback to /api for development
+const baseURL = import.meta.env.VITE_API_URL || "/api";
 
 const axiosInstance = axios.create({
-  baseURL,
+  baseURL: baseURL.endsWith("/") ? baseURL.slice(0, -1) : baseURL,
   withCredentials: true,
 });
 
-// Add response error handling to suppress harmless errors
+// Add request interceptor to include Clerk auth token
+axiosInstance.interceptors.request.use(
+  async (config) => {
+    try {
+      const auth = getAuth();
+      const token = await auth.getToken();
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+    } catch (error) {
+      console.error("Failed to get Clerk token:", error);
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// Add response error handling
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Ignore root path 404s (favicon, health checks, etc)
-    if (error.config?.url === "/" || error.response?.status === 404) {
-      console.debug("Harmless 404:", error.config?.url);
+    // Silently ignore root path 404s (favicon, etc)
+    if (error.config?.url === "/" || !error.config?.url?.startsWith("/api")) {
       return Promise.reject(error);
     }
     return Promise.reject(error);

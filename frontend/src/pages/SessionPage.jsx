@@ -51,10 +51,8 @@ function SessionPage() {
     if (!session || !user || loadingSession) return;
     if (isHost || isParticipant) return;
 
-    joinSessionMutation.mutate(id, { onSuccess: refetch });
-
-    // remove the joinSessionMutation, refetch from dependencies to avoid infinite loop
-  }, [session, user, loadingSession, isHost, isParticipant, id]);
+    joinSessionMutation.mutate(id);
+  }, [session, user, loadingSession, isHost, isParticipant, id, joinSessionMutation]);
 
   // redirect the "participant" when session ends
   useEffect(() => {

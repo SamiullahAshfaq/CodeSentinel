@@ -18,8 +18,8 @@ function DashboardPage() {
 
   const createSessionMutation = useCreateSession();
 
-  const { data: activeSessionsData, isLoading: loadingActiveSessions } = useActiveSessions();
-  const { data: recentSessionsData, isLoading: loadingRecentSessions } = useMyRecentSessions();
+  const { data: activeSessionsData, isLoading: loadingActiveSessions, error: activeError } = useActiveSessions();
+  const { data: recentSessionsData, isLoading: loadingRecentSessions, error: recentError } = useMyRecentSessions();
 
   const handleCreateRoom = () => {
     if (!roomConfig.problem || !roomConfig.difficulty) return;
@@ -40,6 +40,24 @@ function DashboardPage() {
 
   const activeSessions = activeSessionsData?.sessions || [];
   const recentSessions = recentSessionsData?.sessions || [];
+
+  // Show error state if queries fail
+  if (activeError || recentError) {
+    return (
+      <>
+        <div className="min-h-screen bg-base-300">
+          <Navbar />
+          <div className="container mx-auto px-6 py-16">
+            <div className="alert alert-error">
+              <div>
+                <span>Failed to load sessions. Please try refreshing the page.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   const isUserInSession = (session) => {
     if (!user.id) return false;

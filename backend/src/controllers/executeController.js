@@ -30,6 +30,12 @@ const LANGUAGE_CONFIG = {
 };
 
 const EXECUTION_TIMEOUT_MS = 5000;
+const MAX_CODE_LENGTH = 50000; // 50KB limit
+const DANGEROUS_PATTERNS = [
+  /fork\s*\(\s*\)/gi,
+  /while\s*\(\s*true\s*\)/gi,
+  /for\s*\(\s*;\s*;\s*\)/gi,
+];
 
 async function runCommand(command, args, cwd) {
   try {
@@ -82,6 +88,24 @@ export async function executeCode(req, res) {
       success: false,
       error: "Language and code are required",
     });
+  }
+
+  // Validate code length
+  if (code.length > MAX_CODE_LENGTH) {
+    return res.status(400).json({
+      success: false,
+      error: `Code exceeds maximum length of ${MAX_CODE_LENGTH} characters`,
+    });
+  }
+
+  // Check for dangerous patterns
+  for (const pattern of DANGEROUS_PATTERNS) {
+    if (pattern.test(code)) {
+      return res.status(400).json({
+        success: false,
+        error: "Code contains potentially dangerous patterns (infinite loops, fork bombs, etc.)",
+      });
+    }
   }
 
   const languageConfig = LANGUAGE_CONFIG[language];
