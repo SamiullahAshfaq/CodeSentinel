@@ -7,9 +7,13 @@ import DashboardPage from "./pages/DashboardPage";
 import ProblemPage from "./pages/ProblemPage";
 import ProblemsPage from "./pages/ProblemsPage";
 import SessionPage from "./pages/SessionPage";
+import { useAxiosAuth } from "./hooks/useAxiosAuth";
 
 function App() {
   const { isSignedIn, isLoaded } = useUser();
+  
+  // Initialize Clerk token interceptor for axios
+  useAxiosAuth();
 
   // this will get rid of the flickering effect
   if (!isLoaded) return null;
