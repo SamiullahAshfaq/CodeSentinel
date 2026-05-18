@@ -6,6 +6,16 @@ import { promisify } from "node:util";
 
 const execFileAsync = promisify(execFile);
 
+async function runPython(filePath, workingDir) {
+  const result = await runCommand("python3", [filePath], workingDir);
+
+  if (!result.success && result.errorCode === "ENOENT") {
+    return runCommand("python", [filePath], workingDir);
+  }
+
+  return result;
+}
+
 const LANGUAGE_CONFIG = {
   javascript: {
     fileName: "main.js",
@@ -13,7 +23,7 @@ const LANGUAGE_CONFIG = {
   },
   python: {
     fileName: "main.py",
-    run: async (filePath, workingDir) => runCommand("python3", [filePath], workingDir),
+    run: async (filePath, workingDir) => runPython(filePath, workingDir),
   },
   java: {
     fileName: "Main.java",
@@ -21,10 +31,28 @@ const LANGUAGE_CONFIG = {
       const compileResult = await runCommand("javac", [filePath], workingDir);
 
       if (!compileResult.success) {
+        if (compileResult.errorCode === "ENOENT") {
+          return {
+            success: false,
+            output: "",
+            error: "Java compiler (javac) is not available on the server",
+          };
+        }
+
         return compileResult;
       }
 
-      return runCommand("java", ["-cp", workingDir, "Main"], workingDir);
+      const runResult = await runCommand("java", ["-cp", workingDir, "Main"], workingDir);
+
+      if (!runResult.success && runResult.errorCode === "ENOENT") {
+        return {
+          success: false,
+          output: "",
+          error: "Java runtime (java) is not available on the server",
+        };
+      }
+
+      return runResult;
     },
   },
 };
@@ -76,6 +104,7 @@ async function runCommand(command, args, cwd) {
       success: false,
       output: stdout,
       error: stderr || error.message || "Execution failed",
+      errorCode: error.code || null,
     };
   }
 }

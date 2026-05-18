@@ -52,7 +52,7 @@ print(twoSum([3, 2, 4], 6))  # Expected: [1, 2]
 print(twoSum([3, 3], 6))  # Expected: [0, 1]`,
       java: `import java.util.*;
 
-class Solution {
+    class Main {
     public static int[] twoSum(int[] nums, int target) {
         // Write your solution here
         
@@ -121,7 +121,7 @@ reverseString(test2)
 print(test2)  # Expected: ["h","a","n","n","a","H"]`,
       java: `import java.util.*;
 
-class Solution {
+    class Main {
     public static void reverseString(char[] s) {
         // Write your solution here
         
@@ -191,7 +191,7 @@ console.log(isPalindrome(" ")); // Expected: true`,
 print(isPalindrome("A man, a plan, a canal: Panama"))  # Expected: True
 print(isPalindrome("race a car"))  # Expected: False
 print(isPalindrome(" "))  # Expected: True`,
-      java: `class Solution {
+      java: `class Main {
     public static boolean isPalindrome(String s) {
         // Write your solution here
         
@@ -257,7 +257,7 @@ console.log(maxSubArray([5,4,-1,7,8])); // Expected: 23`,
 print(maxSubArray([-2,1,-3,4,-1,2,1,-5,4]))  # Expected: 6
 print(maxSubArray([1]))  # Expected: 1
 print(maxSubArray([5,4,-1,7,8]))  # Expected: 23`,
-      java: `class Solution {
+      java: `class Main {
     public static int maxSubArray(int[] nums) {
         // Write your solution here
         
@@ -320,7 +320,7 @@ console.log(maxArea([1,1])); // Expected: 1`,
 # Test cases
 print(maxArea([1,8,6,2,5,4,8,3,7]))  # Expected: 49
 print(maxArea([1,1]))  # Expected: 1`,
-      java: `class Solution {
+      java: `class Main {
     public static int maxArea(int[] height) {
         // Write your solution here
         
@@ -337,6 +337,185 @@ print(maxArea([1,1]))  # Expected: 1`,
       javascript: "49\n1",
       python: "49\n1",
       java: "49\n1",
+    },
+  },
+
+  "longest-substring-without-repeating-characters": {
+    id: "longest-substring-without-repeating-characters",
+    title: "Longest Substring Without Repeating Characters",
+    difficulty: "Medium",
+    category: "String • Sliding Window",
+    description: {
+      text: "Given a string s, find the length of the longest substring without repeating characters.",
+      notes: [],
+    },
+    examples: [
+      {
+        input: 's = "abcabcbb"',
+        output: "3",
+        explanation: "The answer is \"abc\", with the length of 3.",
+      },
+      {
+        input: 's = "bbbbb"',
+        output: "1",
+        explanation: "The answer is \"b\", with the length of 1.",
+      },
+      {
+        input: 's = "pwwkew"',
+        output: "3",
+        explanation: "The answer is \"wke\", with the length of 3.",
+      },
+    ],
+    constraints: ["0 <= s.length <= 5 * 10^4", "s consists of English letters, digits, symbols and spaces"],
+    starterCode: {
+      javascript: `function lengthOfLongestSubstring(s) {
+  // Write your solution here
+  
+}
+
+// Test cases
+console.log(lengthOfLongestSubstring("abcabcbb")); // Expected: 3
+console.log(lengthOfLongestSubstring("bbbbb")); // Expected: 1
+console.log(lengthOfLongestSubstring("pwwkew")); // Expected: 3`,
+      python: `def lengthOfLongestSubstring(s):
+    # Write your solution here
+    pass
+
+# Test cases
+print(lengthOfLongestSubstring("abcabcbb"))  # Expected: 3
+print(lengthOfLongestSubstring("bbbbb"))  # Expected: 1
+print(lengthOfLongestSubstring("pwwkew"))  # Expected: 3`,
+      java: `class Main {
+    public static int lengthOfLongestSubstring(String s) {
+        // Write your solution here
+        
+        return 0;
+    }
+    
+    public static void main(String[] args) {
+        System.out.println(lengthOfLongestSubstring("abcabcbb")); // Expected: 3
+        System.out.println(lengthOfLongestSubstring("bbbbb")); // Expected: 1
+        System.out.println(lengthOfLongestSubstring("pwwkew")); // Expected: 3
+    }
+}`,
+    },
+    expectedOutput: {
+      javascript: "3\n1\n3",
+      python: "3\n1\n3",
+      java: "3\n1\n3",
+    },
+  },
+
+  "trapping-rain-water": {
+    id: "trapping-rain-water",
+    title: "Trapping Rain Water",
+    difficulty: "Hard",
+    category: "Array • Two Pointers",
+    description: {
+      text: "Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.",
+      notes: [],
+    },
+    examples: [
+      {
+        input: "height = [0,1,0,2,1,0,1,3,2,1,2,1]",
+        output: "6",
+      },
+      {
+        input: "height = [4,2,0,3,2,5]",
+        output: "9",
+      },
+    ],
+    constraints: ["n == height.length", "1 <= n <= 2 * 10^4", "0 <= height[i] <= 10^5"],
+    starterCode: {
+      javascript: `function trap(height) {
+  // Write your solution here
+  
+}
+
+// Test cases
+console.log(trap([0,1,0,2,1,0,1,3,2,1,2,1])); // Expected: 6
+console.log(trap([4,2,0,3,2,5])); // Expected: 9`,
+      python: `def trap(height):
+    # Write your solution here
+    pass
+
+# Test cases
+print(trap([0,1,0,2,1,0,1,3,2,1,2,1]))  # Expected: 6
+print(trap([4,2,0,3,2,5]))  # Expected: 9`,
+      java: `class Main {
+    public static int trap(int[] height) {
+        // Write your solution here
+        
+        return 0;
+    }
+    
+    public static void main(String[] args) {
+        System.out.println(trap(new int[]{0,1,0,2,1,0,1,3,2,1,2,1})); // Expected: 6
+        System.out.println(trap(new int[]{4,2,0,3,2,5})); // Expected: 9
+    }
+}`,
+    },
+    expectedOutput: {
+      javascript: "6\n9",
+      python: "6\n9",
+      java: "6\n9",
+    },
+  },
+
+  "edit-distance": {
+    id: "edit-distance",
+    title: "Edit Distance",
+    difficulty: "Hard",
+    category: "String • Dynamic Programming",
+    description: {
+      text: "Given two strings word1 and word2, return the minimum number of operations required to convert word1 to word2.",
+      notes: ["You may insert a character, delete a character, or replace a character."],
+    },
+    examples: [
+      {
+        input: 'word1 = "horse", word2 = "ros"',
+        output: "3",
+        explanation: "horse -> rorse (replace) -> rose (remove) -> ros (remove).",
+      },
+      {
+        input: 'word1 = "intention", word2 = "execution"',
+        output: "5",
+      },
+    ],
+    constraints: ["0 <= word1.length, word2.length <= 500", "word1 and word2 consist of lowercase English letters"],
+    starterCode: {
+      javascript: `function minDistance(word1, word2) {
+  // Write your solution here
+  
+}
+
+// Test cases
+console.log(minDistance("horse", "ros")); // Expected: 3
+console.log(minDistance("intention", "execution")); // Expected: 5`,
+      python: `def minDistance(word1, word2):
+    # Write your solution here
+    pass
+
+# Test cases
+print(minDistance("horse", "ros"))  # Expected: 3
+print(minDistance("intention", "execution"))  # Expected: 5`,
+      java: `class Main {
+    public static int minDistance(String word1, String word2) {
+        // Write your solution here
+        
+        return 0;
+    }
+    
+    public static void main(String[] args) {
+        System.out.println(minDistance("horse", "ros")); // Expected: 3
+        System.out.println(minDistance("intention", "execution")); // Expected: 5
+    }
+}`,
+    },
+    expectedOutput: {
+      javascript: "3\n5",
+      python: "3\n5",
+      java: "3\n5",
     },
   },
 };
