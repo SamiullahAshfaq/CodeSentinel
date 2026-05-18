@@ -1,12 +1,501 @@
 @import "tailwindcss";
+
 @plugin "daisyui" {
-  themes: all;
+  themes: sentinels sentinels-light;
 }
 
-/* Add cursor pointer to buttons by default - this is coming from tailwind docs */
+/* ═══════════════════════════════════════════════════
+   DARK THEME
+   Foundation: near-black stepped surfaces, not pure black.
+   Red: oklch(52%) — rich, passes WCAG AA 4.5:1 on all surfaces.
+   Text: stepped 93/72/50% lightness — not stark white.
+═══════════════════════════════════════════════════ */
+@plugin "daisyui/theme" {
+  name: "sentinels";
+  default: true;
+  color-scheme: dark;
+
+  /* Surfaces — 4-step scale, each +3-4% lightness */
+  --color-base-100: oklch(8.5% 0 0);   /* page bg        ~#0f0f0f */
+  --color-base-200: oklch(11.5% 0 0);  /* card/panel     ~#171717 */
+  --color-base-300: oklch(15% 0 0);    /* input/raised   ~#1e1e1e */
+  --color-base-content: oklch(92% 0 0); /* primary text   ~#e8e8e8 */
+
+  /* Red — primary action & brand */
+  --color-primary: oklch(52% 0.215 25);
+  --color-primary-content: oklch(97% 0 0);
+
+  --color-secondary: oklch(44% 0.19 25);
+  --color-secondary-content: oklch(97% 0 0);
+
+  --color-accent: oklch(62% 0.21 25);
+  --color-accent-content: oklch(97% 0 0);
+
+  --color-neutral: oklch(18% 0 0);
+  --color-neutral-content: oklch(78% 0 0);
+
+  --color-info: oklch(61% 0.14 232);
+  --color-info-content: oklch(97% 0 0);
+
+  --color-success: oklch(67% 0.17 148);
+  --color-success-content: oklch(10% 0 0);
+
+  --color-warning: oklch(76% 0.16 82);
+  --color-warning-content: oklch(12% 0 0);
+
+  --color-error: oklch(57% 0.22 25);
+  --color-error-content: oklch(97% 0 0);
+
+  --radius-selector: 0.5rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.75rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+/* ═══════════════════════════════════════════════════
+   LIGHT THEME
+   Key improvement: warm white surfaces (~#fafaf8), not cool gray.
+   Cool grays look clinical; warm tones feel intentional and crafted.
+   Red calibrated darker (46%) for 5.1:1 contrast on warm white.
+═══════════════════════════════════════════════════ */
+@plugin "daisyui/theme" {
+  name: "sentinels-light";
+  default: false;
+  color-scheme: light;
+
+  /* Surfaces — warm-tinted, not neutral gray */
+  --color-base-100: oklch(98.5% 0.004 60);  /* warm white    ~#fafaf8 */
+  --color-base-200: oklch(95.5% 0.005 60);  /* warm surface  ~#f3f2ef */
+  --color-base-300: oklch(91% 0.006 60);    /* warm raised   ~#e9e8e4 */
+  --color-base-content: oklch(16% 0.005 30); /* warm near-black */
+
+  /* Red — must be darker on light (46% vs 52% in dark) */
+  --color-primary: oklch(46% 0.215 25);
+  --color-primary-content: oklch(98% 0 0);
+
+  --color-secondary: oklch(38% 0.19 25);
+  --color-secondary-content: oklch(98% 0 0);
+
+  --color-accent: oklch(48% 0.215 25);
+  --color-accent-content: oklch(98% 0 0);
+
+  --color-neutral: oklch(88% 0.006 60);
+  --color-neutral-content: oklch(24% 0.006 30);
+
+  --color-info: oklch(44% 0.14 232);
+  --color-info-content: oklch(98% 0 0);
+
+  --color-success: oklch(40% 0.18 148);
+  --color-success-content: oklch(98% 0 0);
+
+  --color-warning: oklch(58% 0.16 82);
+  --color-warning-content: oklch(10% 0 0);
+
+  --color-error: oklch(46% 0.22 25);
+  --color-error-content: oklch(98% 0 0);
+
+  --radius-selector: 0.5rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.75rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+/* ═══════════════════════════════════════════════════
+   BASE
+═══════════════════════════════════════════════════ */
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply min-h-screen antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  [data-theme="sentinels"] body {
+    background:
+      radial-gradient(
+        ellipse 90% 35% at 50% -5%,
+        oklch(52% 0.215 25 / 0.055),
+        transparent
+      ),
+      oklch(8.5% 0 0);
+  }
+
+  [data-theme="sentinels-light"] body {
+    background: oklch(98.5% 0.004 60);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    * {
+      transition: color 0.15s ease, background-color 0.15s ease,
+                  border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+  }
+
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
   }
+
+  [data-theme="sentinels"] ::selection {
+    background: oklch(52% 0.215 25 / 0.28);
+    color: oklch(97% 0 0);
+  }
+
+  [data-theme="sentinels-light"] ::selection {
+    background: oklch(46% 0.215 25 / 0.18);
+    color: oklch(10% 0 0);
+  }
+
+  /* Scrollbar — dark */
+  [data-theme="sentinels"] ::-webkit-scrollbar { width: 8px; }
+  [data-theme="sentinels"] ::-webkit-scrollbar-track { background: oklch(10% 0 0); }
+  [data-theme="sentinels"] ::-webkit-scrollbar-thumb {
+    background: oklch(22% 0 0);
+    border-radius: 999px;
+    border: 2px solid oklch(10% 0 0);
+  }
+  [data-theme="sentinels"] ::-webkit-scrollbar-thumb:hover {
+    background: oklch(52% 0.215 25 / 0.65);
+  }
+
+  /* Scrollbar — light */
+  [data-theme="sentinels-light"] ::-webkit-scrollbar { width: 8px; }
+  [data-theme="sentinels-light"] ::-webkit-scrollbar-track { background: oklch(93% 0.005 60); }
+  [data-theme="sentinels-light"] ::-webkit-scrollbar-thumb {
+    background: oklch(78% 0.006 60);
+    border-radius: 999px;
+    border: 2px solid oklch(93% 0.005 60);
+  }
+  [data-theme="sentinels-light"] ::-webkit-scrollbar-thumb:hover {
+    background: oklch(46% 0.215 25 / 0.5);
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   COMPONENTS
+═══════════════════════════════════════════════════ */
+@layer components {
+
+  /* ── Cards ── */
+  [data-theme="sentinels"] .card,
+  [data-theme="sentinels"] .modal-box,
+  [data-theme="sentinels"] .dropdown-content,
+  [data-theme="sentinels"] .menu,
+  [data-theme="sentinels"] .mockup-window {
+    background: oklch(11.5% 0 0);
+    border: 1px solid oklch(100% 0 0 / 0.072);
+    box-shadow: 0 1px 4px oklch(0% 0 0 / 0.45);
+    backdrop-filter: none;
+  }
+
+  [data-theme="sentinels-light"] .card,
+  [data-theme="sentinels-light"] .modal-box,
+  [data-theme="sentinels-light"] .dropdown-content,
+  [data-theme="sentinels-light"] .menu,
+  [data-theme="sentinels-light"] .mockup-window {
+    background: oklch(100% 0 0);
+    border: 1px solid oklch(0% 0 0 / 0.085);
+    box-shadow: 0 1px 3px oklch(0% 0 0 / 0.055), 0 4px 12px oklch(0% 0 0 / 0.035);
+    backdrop-filter: none;
+  }
+
+  /* ── Buttons ── */
+  .btn {
+    @apply font-medium;
+    text-transform: none;
+    letter-spacing: 0.01em;
+    box-shadow: none;
+    transition: background 0.15s ease, transform 0.1s ease;
+  }
+
+  .btn:hover:not(:disabled) { transform: translateY(-1px); }
+  .btn:active:not(:disabled) { transform: translateY(0) scale(0.99); }
+
+  [data-theme="sentinels"] .btn-primary {
+    background: oklch(52% 0.215 25);
+    color: oklch(97% 0 0);
+    border: none;
+  }
+  [data-theme="sentinels"] .btn-primary:hover:not(:disabled) {
+    background: oklch(55% 0.215 25);
+  }
+
+  [data-theme="sentinels-light"] .btn-primary {
+    background: oklch(46% 0.215 25);
+    color: oklch(98% 0 0);
+    border: none;
+  }
+  [data-theme="sentinels-light"] .btn-primary:hover:not(:disabled) {
+    background: oklch(50% 0.215 25);
+  }
+
+  [data-theme="sentinels"] .btn-ghost {
+    background: transparent;
+    border: 1px solid oklch(100% 0 0 / 0.1);
+    color: oklch(68% 0 0);
+  }
+  [data-theme="sentinels"] .btn-ghost:hover:not(:disabled) {
+    background: oklch(100% 0 0 / 0.04);
+    border-color: oklch(100% 0 0 / 0.16);
+    color: oklch(88% 0 0);
+  }
+
+  [data-theme="sentinels-light"] .btn-ghost {
+    background: transparent;
+    border: 1px solid oklch(0% 0 0 / 0.12);
+    color: oklch(42% 0.004 30);
+  }
+  [data-theme="sentinels-light"] .btn-ghost:hover:not(:disabled) {
+    background: oklch(0% 0 0 / 0.03);
+    border-color: oklch(0% 0 0 / 0.18);
+    color: oklch(22% 0.005 30);
+  }
+
+  /* ── Inputs ── */
+  [data-theme="sentinels"] .input,
+  [data-theme="sentinels"] .textarea,
+  [data-theme="sentinels"] .select {
+    background: oklch(15% 0 0);
+    border: 1px solid oklch(100% 0 0 / 0.1);
+    color: oklch(92% 0 0);
+    box-shadow: none;
+  }
+  [data-theme="sentinels"] .input::placeholder,
+  [data-theme="sentinels"] .textarea::placeholder { color: oklch(40% 0 0); }
+  [data-theme="sentinels"] .input:focus,
+  [data-theme="sentinels"] .textarea:focus,
+  [data-theme="sentinels"] .select:focus {
+    outline: none;
+    border-color: oklch(52% 0.215 25 / 0.55);
+    box-shadow: 0 0 0 3px oklch(52% 0.215 25 / 0.1);
+  }
+
+  [data-theme="sentinels-light"] .input,
+  [data-theme="sentinels-light"] .textarea,
+  [data-theme="sentinels-light"] .select {
+    background: oklch(100% 0 0);
+    border: 1px solid oklch(0% 0 0 / 0.14);
+    color: oklch(16% 0.005 30);
+    box-shadow: none;
+  }
+  [data-theme="sentinels-light"] .input::placeholder,
+  [data-theme="sentinels-light"] .textarea::placeholder { color: oklch(62% 0.004 60); }
+  [data-theme="sentinels-light"] .input:focus,
+  [data-theme="sentinels-light"] .textarea:focus,
+  [data-theme="sentinels-light"] .select:focus {
+    outline: none;
+    border-color: oklch(46% 0.215 25 / 0.55);
+    box-shadow: 0 0 0 3px oklch(46% 0.215 25 / 0.1);
+  }
+
+  /* ── Navbar ── */
+  [data-theme="sentinels"] .navbar {
+    background: oklch(8.5% 0 0 / 0.96);
+    border-bottom: 1px solid oklch(100% 0 0 / 0.062);
+  }
+  [data-theme="sentinels-light"] .navbar {
+    background: oklch(100% 0 0 / 0.94);
+    border-bottom: 1px solid oklch(0% 0 0 / 0.07);
+    box-shadow: 0 1px 3px oklch(0% 0 0 / 0.04);
+  }
+
+  /* ── Badges ── */
+  .badge { font-weight: 500; letter-spacing: 0.02em; }
+
+  [data-theme="sentinels"] .badge-primary {
+    background: oklch(52% 0.215 25 / 0.15);
+    color: oklch(62% 0.21 25);
+    border: 1px solid oklch(52% 0.215 25 / 0.22);
+  }
+  [data-theme="sentinels-light"] .badge-primary {
+    background: oklch(46% 0.215 25 / 0.1);
+    color: oklch(38% 0.19 25);
+    border: 1px solid oklch(46% 0.215 25 / 0.18);
+  }
+
+  /* ── Sidebar active ── */
+  [data-theme="sentinels"] .menu li > *:not(ul):not(.menu-title):not(details).active,
+  [data-theme="sentinels"] .menu li > *:not(ul):not(.menu-title):not(details):active {
+    background: oklch(52% 0.215 25 / 0.1);
+    color: oklch(92% 0 0);
+    border-left: 2px solid oklch(52% 0.215 25);
+    border-radius: 0 0.5rem 0.5rem 0;
+  }
+  [data-theme="sentinels-light"] .menu li > *:not(ul):not(.menu-title):not(details).active,
+  [data-theme="sentinels-light"] .menu li > *:not(ul):not(.menu-title):not(details):active {
+    background: oklch(46% 0.215 25 / 0.08);
+    color: oklch(30% 0.19 25);
+    border-left: 2px solid oklch(46% 0.215 25);
+    border-radius: 0 0.5rem 0.5rem 0;
+  }
+
+  /* ── Tables ── */
+  [data-theme="sentinels"] .table th {
+    color: oklch(46% 0 0);
+    font-size: 0.7rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    font-weight: 500;
+    border-bottom: 1px solid oklch(100% 0 0 / 0.07);
+  }
+  [data-theme="sentinels"] .table td {
+    border-color: oklch(100% 0 0 / 0.05);
+    color: oklch(70% 0 0);
+  }
+  [data-theme="sentinels"] .table tr:hover td { background: oklch(100% 0 0 / 0.022); }
+
+  [data-theme="sentinels-light"] .table th {
+    color: oklch(54% 0.004 60);
+    font-size: 0.7rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    font-weight: 500;
+    border-bottom: 1px solid oklch(0% 0 0 / 0.07);
+  }
+  [data-theme="sentinels-light"] .table td {
+    border-color: oklch(0% 0 0 / 0.05);
+    color: oklch(36% 0.004 30);
+  }
+  [data-theme="sentinels-light"] .table tr:hover td { background: oklch(0% 0 0 / 0.018); }
+
+  /* ── Stats ── */
+  [data-theme="sentinels"] .stat {
+    background: oklch(11.5% 0 0);
+    border: 1px solid oklch(100% 0 0 / 0.07);
+  }
+  [data-theme="sentinels"] .stat-value { color: oklch(92% 0 0); }
+  [data-theme="sentinels"] .stat-title { color: oklch(46% 0 0); }
+  [data-theme="sentinels"] .stat-desc  { color: oklch(40% 0 0); }
+
+  [data-theme="sentinels-light"] .stat {
+    background: oklch(95.5% 0.005 60);
+    border: 1px solid oklch(0% 0 0 / 0.07);
+  }
+  [data-theme="sentinels-light"] .stat-value { color: oklch(16% 0.005 30); }
+  [data-theme="sentinels-light"] .stat-title { color: oklch(52% 0.004 60); }
+  [data-theme="sentinels-light"] .stat-desc  { color: oklch(60% 0.004 60); }
+
+  /* ── Divider ── */
+  [data-theme="sentinels"] .divider { border-color: oklch(100% 0 0 / 0.07); }
+  [data-theme="sentinels-light"] .divider { border-color: oklch(0% 0 0 / 0.08); }
+
+  /* ── Tabs ── */
+  [data-theme="sentinels"] .tab.tab-active {
+    color: oklch(92% 0 0);
+    border-color: oklch(52% 0.215 25);
+  }
+  [data-theme="sentinels-light"] .tab.tab-active {
+    color: oklch(16% 0.005 30);
+    border-color: oklch(46% 0.215 25);
+  }
+
+  /* ── Tooltip ── */
+  [data-theme="sentinels"] .tooltip::before {
+    background: oklch(18% 0 0);
+    color: oklch(86% 0 0);
+    border: 1px solid oklch(100% 0 0 / 0.1);
+    font-size: 0.72rem;
+  }
+  [data-theme="sentinels-light"] .tooltip::before {
+    background: oklch(18% 0.005 30);
+    color: oklch(96% 0 0);
+    border: 1px solid oklch(0% 0 0 / 0.12);
+    font-size: 0.72rem;
+  }
+
+  /* ── Alert ── */
+  [data-theme="sentinels"] .alert {
+    background: oklch(11.5% 0 0);
+    border: 1px solid oklch(100% 0 0 / 0.08);
+  }
+  [data-theme="sentinels-light"] .alert {
+    background: oklch(98% 0.004 60);
+    border: 1px solid oklch(0% 0 0 / 0.09);
+  }
+
+  /* ── Progress ── */
+  [data-theme="sentinels"] .progress::-webkit-progress-bar {
+    background: oklch(18% 0 0);
+    border-radius: 999px;
+  }
+  [data-theme="sentinels"] .progress::-webkit-progress-value {
+    background: oklch(52% 0.215 25);
+    border-radius: 999px;
+  }
+  [data-theme="sentinels-light"] .progress::-webkit-progress-bar {
+    background: oklch(88% 0.005 60);
+    border-radius: 999px;
+  }
+  [data-theme="sentinels-light"] .progress::-webkit-progress-value {
+    background: oklch(46% 0.215 25);
+    border-radius: 999px;
+  }
+
+  /* ── Toggle / Checkbox / Radio ── */
+  [data-theme="sentinels"] .toggle:checked,
+  [data-theme="sentinels"] .checkbox:checked,
+  [data-theme="sentinels"] .radio:checked {
+    background: oklch(52% 0.215 25);
+    border-color: oklch(52% 0.215 25);
+  }
+  [data-theme="sentinels-light"] .toggle:checked,
+  [data-theme="sentinels-light"] .checkbox:checked,
+  [data-theme="sentinels-light"] .radio:checked {
+    background: oklch(46% 0.215 25);
+    border-color: oklch(46% 0.215 25);
+  }
+
+  /* ── Range slider ── */
+  [data-theme="sentinels"] .range::-webkit-slider-thumb { background: oklch(52% 0.215 25); }
+  [data-theme="sentinels-light"] .range::-webkit-slider-thumb { background: oklch(46% 0.215 25); }
+}
+
+/* ═══════════════════════════════════════════════════
+   UTILITIES
+═══════════════════════════════════════════════════ */
+@layer utilities {
+
+  [data-theme="sentinels"] .text-gradient {
+    background: linear-gradient(135deg, oklch(92% 0 0) 0%, oklch(62% 0.21 25) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  [data-theme="sentinels-light"] .text-gradient {
+    background: linear-gradient(135deg, oklch(20% 0.005 30) 0%, oklch(46% 0.215 25) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  [data-theme="sentinels"] .text-accent-readable { color: oklch(62% 0.21 25); }
+  [data-theme="sentinels-light"] .text-accent-readable { color: oklch(46% 0.215 25); }
+
+  [data-theme="sentinels"] .text-muted { color: oklch(52% 0 0); }
+  [data-theme="sentinels-light"] .text-muted { color: oklch(54% 0.004 60); }
+
+  [data-theme="sentinels"] .text-subtle { color: oklch(40% 0 0); }
+  [data-theme="sentinels-light"] .text-subtle { color: oklch(65% 0.004 60); }
+
+  [data-theme="sentinels"] .border-accent-red {
+    border-left: 2px solid oklch(52% 0.215 25);
+    padding-left: 0.75rem;
+  }
+  [data-theme="sentinels-light"] .border-accent-red {
+    border-left: 2px solid oklch(46% 0.215 25);
+    padding-left: 0.75rem;
+  }
+
+  [data-theme="sentinels"] .bg-red-tint { background: oklch(52% 0.215 25 / 0.07); }
+  [data-theme="sentinels-light"] .bg-red-tint { background: oklch(46% 0.215 25 / 0.07); }
+
+  [data-theme="sentinels"] .separator { border-top: 1px solid oklch(100% 0 0 / 0.062); }
+  [data-theme="sentinels-light"] .separator { border-top: 1px solid oklch(0% 0 0 / 0.07); }
 }
